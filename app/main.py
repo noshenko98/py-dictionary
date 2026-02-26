@@ -16,7 +16,7 @@ class Dictionary:
             self.capacity = self.capacity * 2
             self.hash_table = [None] * self.capacity
             for old_hash_el in temp:
-                if old_hash_el is None:
+                if old_hash_el is None or old_hash_el == "del_elm":
                     continue
                 self.find_free_space(old_hash_el[0], old_hash_el[2])
             self.find_free_space(key, value)
@@ -25,7 +25,7 @@ class Dictionary:
 
     def __getitem__(self, key: Hashable) -> Any:
         first_index = hash(key) % self.capacity
-        if self.hash_table[first_index] is None:
+        if self.hash_table[first_index] is None or self.hash_table[first_index] == "del_elm":
             pass
         else:
             if self.hash_table[first_index][0] == key:
@@ -48,7 +48,7 @@ class Dictionary:
             pass
         else:
             if self.hash_table[first_index][0] == key:
-                self.hash_table[first_index] = None
+                self.hash_table[first_index] = "del_elm"
                 self.len_elem -= 1
                 return None
         index = (list(range(first_index, self.capacity))
@@ -57,7 +57,7 @@ class Dictionary:
             if self.hash_table[i] is None:
                 continue
             if self.hash_table[i][0] == key:
-                self.hash_table[i] = None
+                self.hash_table[i] = "del_elm"
                 self.len_elem -= 1
                 return None
         raise KeyError("Key not found")
@@ -65,7 +65,7 @@ class Dictionary:
     def find_free_space(self, key: Hashable, value: Any) -> None:
         index = hash(key) % self.capacity
         while True:
-            if self.hash_table[index] is None:
+            if self.hash_table[index] is None or self.hash_table[index] == "del_elm":
                 self.hash_table[index] = (key, hash(key), value)
                 self.len_elem += 1
                 break
