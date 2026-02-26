@@ -25,7 +25,8 @@ class Dictionary:
 
     def __getitem__(self, key: Hashable) -> Any:
         first_index = hash(key) % self.capacity
-        if self.hash_table[first_index] is None or self.hash_table[first_index] == "del_elm":
+        if (self.hash_table[first_index] is None
+                or self.hash_table[first_index] == "del_elm"):
             pass
         else:
             if self.hash_table[first_index][0] == key:
@@ -65,7 +66,8 @@ class Dictionary:
     def find_free_space(self, key: Hashable, value: Any) -> None:
         index = hash(key) % self.capacity
         while True:
-            if self.hash_table[index] is None or self.hash_table[index] == "del_elm":
+            if (self.hash_table[index] is None
+                    or self.hash_table[index] == "del_elm"):
                 self.hash_table[index] = (key, hash(key), value)
                 self.len_elem += 1
                 break
