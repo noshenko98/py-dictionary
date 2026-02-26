@@ -37,10 +37,30 @@ class Dictionary:
                 continue
             if self.hash_table[i][0] == key:
                 return self.hash_table[i][2]
-        raise KeyError
+        raise KeyError("Key not found")
 
     def __len__(self) -> int:
         return self.len_elem
+
+    def __delitem__(self, key: Hashable) -> None:
+        first_index = hash(key) % self.capacity
+        if self.hash_table[first_index] is None:
+            pass
+        else:
+            if self.hash_table[first_index][0] == key:
+                self.hash_table[first_index] = None
+                self.len_elem -= 1
+                return None
+        index = (list(range(first_index, self.capacity))
+                 + list(range(0, first_index)))
+        for i in index:
+            if self.hash_table[i] is None:
+                continue
+            if self.hash_table[i][0] == key:
+                self.hash_table[i] = None
+                self.len_elem -= 1
+                return None
+        raise KeyError("Key not found")
 
     def find_free_space(self, key: Hashable, value: Any) -> None:
         index = hash(key) % self.capacity
@@ -57,3 +77,8 @@ class Dictionary:
                     index = 0
                 else:
                     index += 1
+
+    def clear(self) -> None:
+        self.len_elem = 0
+        self.capacity = 8
+        self.hash_table: list = [None] * self.capacity
